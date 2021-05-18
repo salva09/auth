@@ -10,4 +10,22 @@ edition = "2018"
 sha2 = "0.9.5"
 diesel = { version = "1.4.4", features = ["sqlite"] }
 libsqlite3-sys = { version = "^0", features = ["bundled"] }
-dotenv = "0.15.0"
+dotenv = "0.15"
+config = "0.10"
+actix-web = "2"
+actix-rt = "1"
+actix-identity = "0.2"
+actix-web-httpauth = "0.4"
+serde = { version = "1.0", features = ["derive"] }
+futures = { version = "0.3", features = ["compat"] }
+color-eyre = "0.3"
+eyre = "0.4"
+tracing = "0.1"
+tracing-futures = "0.2"
+tracing-log = { version = "0.1", features = ["env_logger"] }
+tracing-subscriber = "0.2"
+uuid = { version = "0.8", features = ["serde"] }
+chrono = { version = "0.4", features = ["serde"] }
+validator = "0.10"
+validator_derive = "0.10"
+jsonwebtoken = "7.1"
