@@ -1,4 +1,5 @@
 mod hasher;
+mod database;
 
 use hasher::hash;
 
