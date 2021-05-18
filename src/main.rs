@@ -4,14 +4,16 @@ extern crate dotenv;
 
 mod config;
 mod database;
+mod handlers;
 mod hasher;
 
 use crate::config::Config;
 use hasher::hash;
 
-use color_eyre::Result;
+use crate::handlers::app_config;
 use actix_web::middleware::Logger;
-use actix_web::{App, web, HttpServer};
+use actix_web::{web, App, HttpServer};
+use color_eyre::Result;
 use tracing::{info, instrument};
 
 #[actix_rt::main]
@@ -21,7 +23,7 @@ async fn main() -> Result<()> {
 
     info!("Starting server at http://{}:{}/", config.host, config.port);
 
-    HttpServer::new(|| App::new().wrap(Logger::default()))
+    HttpServer::new(|| App::new().wrap(Logger::default()).configure(app_config))
         .bind(format!("{}:{}", config.host, config.port))?
         .run()
         .await?;
