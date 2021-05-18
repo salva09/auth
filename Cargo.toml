@@ -9,4 +9,5 @@ edition = "2018"
 [dependencies]
 sha2 = "0.9.5"
 diesel = { version = "1.4.4", features = ["sqlite"] }
+libsqlite3-sys = { version = "^0", features = ["bundled"] }
 dotenv = "0.15.0"
