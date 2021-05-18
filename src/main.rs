@@ -1,3 +1,7 @@
+mod hasher;
+
+use hasher::hash;
+
 fn main() {
-    println!("Hello, world!");
+    println!("{}", hash("Salvador"));
 }
