@@ -2,19 +2,18 @@
 extern crate diesel;
 extern crate dotenv;
 
-mod config;
-mod database;
-mod handlers;
-mod hasher;
-
-use crate::config::Config;
-use hasher::hash;
-
-use crate::handlers::app_config;
 use actix_web::middleware::Logger;
-use actix_web::{web, App, HttpServer};
+use actix_web::{App, HttpServer};
 use color_eyre::Result;
 use tracing::{info, instrument};
+
+use crate::config::Config;
+use crate::handlers::app_config;
+
+mod config;
+mod crypto;
+mod database;
+mod handlers;
 
 #[actix_rt::main]
 #[instrument]

@@ -1,9 +1,8 @@
 use actix_web::{web, HttpResponse, Responder};
 use serde::{Deserialize, Serialize};
-use tracing::info;
 
+use crate::crypto::hasher::hash;
 use crate::database::insert_user;
-use crate::hasher::hash;
 
 #[derive(Serialize, Deserialize)]
 pub struct User {

@@ -1,6 +1,7 @@
 mod models;
 mod schema;
 
+use crate::config::Config;
 use crate::database::models::NewUser;
 use diesel::prelude::*;
 use diesel::sqlite::SqliteConnection;
@@ -8,10 +9,9 @@ use dotenv::dotenv;
 use std::env;
 
 fn establish_connection() -> SqliteConnection {
-    dotenv().ok();
+    let config = Config::from_env().expect("Server configuration");
 
-    let database_url = env::var("DATABASE_URL").expect("DATABASE_URL must be set");
-    SqliteConnection::establish(&database_url)
+    SqliteConnection::establish(&config.database_url)
         .expect(&format!("Error connecting to {}", database_url))
 }
 

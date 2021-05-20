@@ -4,7 +4,6 @@ use eyre::WrapErr;
 
 use serde::Deserialize;
 
-use std::sync::Arc;
 use tracing::{info, instrument};
 use tracing_subscriber::EnvFilter;
 
@@ -13,6 +12,7 @@ pub struct Config {
     pub host: String,
     pub port: i32,
     pub database_url: String,
+    pub jwt_secret: String,
 }
 
 impl Config {
