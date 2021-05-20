@@ -1,6 +1,22 @@
-use actix_web::{HttpResponse, Responder};
+use crate::database::insert_user;
+use crate::hasher::hash;
+use actix_web::{web, HttpResponse, Responder};
+use serde::{Deserialize, Serialize};
 
-pub async fn create_user() -> impl Responder {
+#[derive(Serialize, Deserialize)]
+pub struct User {
+    name: String,
+    email: String,
+    password: String,
+}
+
+pub async fn create_user(user: web::Json<User>) -> impl Responder {
+    let hashed_passwd = hash(user.password.as_str());
+    insert_user(
+        user.name.as_str(),
+        user.email.as_str(),
+        hashed_passwd.as_str(),
+    );
     HttpResponse::Ok()
 }
 

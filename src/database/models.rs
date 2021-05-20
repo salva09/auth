@@ -1,9 +1,9 @@
 use crate::database::schema::users;
 
 #[derive(Insertable)]
-#[table_name="users"]
+#[table_name = "users"]
 pub struct NewUser<'a> {
-    name: &'a str,
-    email: &'a str,
-    password: &'a str
+    pub name: &'a str,
+    pub email: &'a str,
+    pub password: &'a str,
 }

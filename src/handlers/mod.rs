@@ -1,7 +1,7 @@
 mod auth;
 
+use crate::handlers::auth::{create_user, user_login};
 use actix_web::web;
-use crate::handlers::auth::{create_user,  user_login};
 
 pub fn app_config(config: &mut web::ServiceConfig) {
     let signup = web::resource("/signup").route(web::post().to(create_user));
