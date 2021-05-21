@@ -1,17 +1,17 @@
 mod models;
 mod schema;
 
-use crate::config::Config;
-use crate::database::models::NewUser;
+use color_eyre::Result;
 use diesel::prelude::*;
 use diesel::sqlite::SqliteConnection;
-use dotenv::dotenv;
-use std::env;
+
+use crate::config::Config;
+use crate::database::models::{NewUser, User};
 
 fn establish_connection() -> SqliteConnection {
-    let config = Config::from_env().expect("Server configuration");
+    let database_url = Config::get("DATABASE_URL".parse().unwrap());
 
-    SqliteConnection::establish(&config.database_url)
+    SqliteConnection::establish(&database_url)
         .expect(&format!("Error connecting to {}", database_url))
 }
 
@@ -29,4 +29,17 @@ pub fn insert_user<'a>(name: &'a str, email: &'a str, password: &'a str) -> usiz
         .values(&new_user)
         .execute(&connection)
         .expect("User insertion into database")
+}
+
+pub fn find_user(username: String, passwd: String) -> Result<User> {
+    use schema::users::dsl::*;
+
+    let connection = establish_connection();
+
+    let user: User = users
+        .filter(name.eq(username))
+        .filter(password.eq(passwd))
+        .first(&connection)?;
+
+    Ok(user.clone())
 }

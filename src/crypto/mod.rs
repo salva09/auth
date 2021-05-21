@@ -1,2 +1,2 @@
 pub mod hasher;
-mod token;
+pub(crate) mod token;

@@ -18,12 +18,13 @@ mod handlers;
 #[actix_rt::main]
 #[instrument]
 async fn main() -> Result<()> {
-    let config = Config::from_env().expect("Server configuration");
+    let host = Config::get("HOST".parse()?);
+    let port = Config::get("PORT".parse()?);
 
-    info!("Starting server at http://{}:{}/", config.host, config.port);
+    info!("Starting server at http://{}:{}/", host, port);
 
     HttpServer::new(|| App::new().wrap(Logger::default()).configure(app_config))
-        .bind(format!("{}:{}", config.host, config.port))?
+        .bind(format!("{}:{}", host, port))?
         .run()
         .await?;
 
