@@ -18,6 +18,8 @@ mod handlers;
 #[actix_rt::main]
 #[instrument]
 async fn main() -> Result<()> {
+    Config::load_logger();
+
     let host = Config::get("HOST".parse()?);
     let port = Config::get("PORT".parse()?);
 

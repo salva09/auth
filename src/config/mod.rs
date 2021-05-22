@@ -3,6 +3,8 @@ use dotenv::dotenv;
 use serde::Deserialize;
 
 use std::env;
+use tracing_subscriber::EnvFilter;
+use tracing::instrument;
 
 #[derive(Debug, Deserialize)]
 pub struct Config {
@@ -17,5 +19,14 @@ impl Config {
         dotenv().ok();
 
         env::var(&key).expect(&*format!("Key {} not set", &key))
+    }
+
+    #[instrument]
+    pub fn load_logger() {
+        dotenv().ok();
+
+        tracing_subscriber::fmt()
+            .with_env_filter(EnvFilter::from_default_env())
+            .init();
     }
 }
