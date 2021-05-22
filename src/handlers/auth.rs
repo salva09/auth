@@ -18,7 +18,12 @@ pub struct UserLogin {
 }
 
 #[derive(Serialize)]
-struct Result {
+struct Success {
+    token: String,
+}
+
+#[derive(Serialize)]
+struct Error {
     message: String,
 }
 
@@ -34,10 +39,10 @@ pub async fn create_user(user: web::Json<User>) -> impl Responder {
 
 pub async fn user_login(user: web::Json<UserLogin>) -> impl Responder {
     match find_user(user.name.clone(), hash(user.password.as_str())) {
-        Ok(user) => web::Json(Result {
-            message: generate_token(user.id.to_string(), user.name).unwrap(),
+        Ok(user) => HttpResponse::Ok().json(Success {
+            token: generate_token(user.id.to_string(), user.name).unwrap(),
         }),
-        Err(_) => web::Json(Result {
+        Err(_) => HttpResponse::Unauthorized().json(Error {
             message: "User or password are incorrect".to_string(),
         }),
     }
