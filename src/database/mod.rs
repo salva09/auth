@@ -37,17 +37,11 @@ pub fn find_user(username: String, passwd: Option<String>) -> Result<User> {
     let connection = establish_connection();
 
     let user: User = match passwd {
-        Some(psw) => {
-            users
-                .filter(name.eq(username))
-                .filter(password.eq(psw))
-                .first(&connection)?
-        },
-        None => {
-            users
-                .filter(name.eq(username))
-                .first(&connection)?
-        },
+        Some(psw) => users
+            .filter(name.eq(username))
+            .filter(password.eq(psw))
+            .first(&connection)?,
+        None => users.filter(name.eq(username)).first(&connection)?,
     };
 
     Ok(user.clone())

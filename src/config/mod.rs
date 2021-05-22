@@ -3,8 +3,8 @@ use dotenv::dotenv;
 use serde::Deserialize;
 
 use std::env;
-use tracing_subscriber::EnvFilter;
 use tracing::instrument;
+use tracing_subscriber::EnvFilter;
 
 #[derive(Debug, Deserialize)]
 pub struct Config {

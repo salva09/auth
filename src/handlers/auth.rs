@@ -29,11 +29,9 @@ struct Error {
 
 pub async fn create_user(user: web::Json<User>) -> impl Responder {
     match find_user(user.name.clone(), None) {
-        Ok(_) => {
-            HttpResponse::Conflict().json(Error {
-                message: "User already exists in the database".to_string()
-            })
-        }
+        Ok(_) => HttpResponse::Conflict().json(Error {
+            message: "User already exists in the database".to_string(),
+        }),
         Err(_) => {
             let hashed_passwd = hash(user.password.as_str());
             insert_user(
