@@ -28,17 +28,26 @@ struct Error {
 }
 
 pub async fn create_user(user: web::Json<User>) -> impl Responder {
-    let hashed_passwd = hash(user.password.as_str());
-    insert_user(
-        user.name.as_str(),
-        user.email.as_str(),
-        hashed_passwd.as_str(),
-    );
-    HttpResponse::Ok()
+    match find_user(user.name.clone(), None) {
+        Ok(_) => {
+            HttpResponse::Conflict().json(Error {
+                message: "User already exists in the database".to_string()
+            })
+        }
+        Err(_) => {
+            let hashed_passwd = hash(user.password.as_str());
+            insert_user(
+                user.name.as_str(),
+                user.email.as_str(),
+                hashed_passwd.as_str(),
+            );
+            HttpResponse::Ok().body("User registered successfully")
+        }
+    }
 }
 
 pub async fn user_login(user: web::Json<UserLogin>) -> impl Responder {
-    match find_user(user.name.clone(), hash(user.password.as_str())) {
+    match find_user(user.name.clone(), Some(hash(user.password.as_str()))) {
         Ok(user) => HttpResponse::Ok().json(Success {
             token: generate_token(user.id.to_string(), user.name).unwrap(),
         }),

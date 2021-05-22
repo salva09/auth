@@ -31,15 +31,24 @@ pub fn insert_user<'a>(name: &'a str, email: &'a str, password: &'a str) -> usiz
         .expect("User insertion into database")
 }
 
-pub fn find_user(username: String, passwd: String) -> Result<User> {
+pub fn find_user(username: String, passwd: Option<String>) -> Result<User> {
     use schema::users::dsl::*;
 
     let connection = establish_connection();
 
-    let user: User = users
-        .filter(name.eq(username))
-        .filter(password.eq(passwd))
-        .first(&connection)?;
+    let user: User = match passwd {
+        Some(psw) => {
+            users
+                .filter(name.eq(username))
+                .filter(password.eq(psw))
+                .first(&connection)?
+        },
+        None => {
+            users
+                .filter(name.eq(username))
+                .first(&connection)?
+        },
+    };
 
     Ok(user.clone())
 }
